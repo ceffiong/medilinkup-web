@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"medilinkupdb.patientsymptoms"}],"uuid":"4f1a7617135f45c19efe0e10c60a544c"}
