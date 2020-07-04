@@ -29,7 +29,7 @@ import { isThisQuarter } from 'date-fns';
 import { LoginContext } from '../../context/LoginContext';
 
 const api = axios.create({
-    baseURL: `http://ec2-52-3-255-170.compute-1.amazonaws.com:3000/api`
+    baseURL: process.env.REACT_APP_MY_HOST
 })
 
 function api_header(){
