@@ -15,7 +15,7 @@
     "axios": "^0.19.2",
     "axois": "0.0.1-security",
     "date-fns": "^2.14.0",
-    "material-table": "^1.58.2",
+    "material-table": "^1.52.0",
     "react": "^16.13.1",
     "react-avatar": "^3.9.7",
     "react-dom": "^16.13.1",

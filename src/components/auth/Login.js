@@ -32,24 +32,28 @@ const api = axios.create({
   baseURL: process.env.REACT_APP_MY_HOST
 })
 
-  const useStyles = makeStyles((theme) => ({
-    root: {
-        
-    },
-    control: {
-      padding: theme.spacing(5),
-      textAlign: "center",
-      margin: theme.spacing(5)
-    },
-    textcolor: {
-      color: mytextcolor
-    },
-    backdrop: {
-      zIndex: theme.zIndex.drawer + 1,
-      color: '#fff',
-    },
+function validateEmail(email){
+  const re = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
+  return re.test(String(email).toLowerCase());
+}
 
-  }));
+const useStyles = makeStyles((theme) => ({
+  root: {
+    margin: theme.spacing(0)
+  },
+  control: {
+    textAlign: "center",
+    padding: theme.spacing(5)
+  },
+  textcolor: {
+    color: mytextcolor
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+
+}));
   
 
 const Login = () => {
@@ -82,51 +86,51 @@ const Login = () => {
     };
 
     const handleLogin = (e) => {
-        e.preventDefault();
+      e.preventDefault();
+      if(validateEmail(email) === false){
+        setErrorMessage("Please enter a valid email")
+        setIserror(true)
+      }else{
         setOpen(true)
         api.post('/healthworkers/login', {contact: {email: email}, password: password})
-            .then(res => {
-                //store login details in local storage
-                dispatch({type: 'LOGIN', healthworker:{login: true, id: res.data._id, token: res.data.token, fname: res.data.fname, lname: res.data.lname}});
-                setIserror(false)
-                setErrorMessage("")
+          .then(res => {
+              //store login details in local storage
+              dispatch({type: 'LOGIN', healthworker:{login: true, id: res.data._id, token: res.data.token, fname: res.data.fname, lname: res.data.lname}});
+              setIserror(false)
+              setErrorMessage("")
 
-                //get healthwork and patient count
-                const userToken = {
-                  headers: {
-                    Authorization: "Bearer " + res.data.token
-                  }
+              //get healthwork and patient count
+              const userToken = {
+                headers: {
+                  Authorization: "Bearer " + res.data.token
                 }
+              }
 
-                setTimeout(() => {
-                  setEmail('');
-                  setPassword('');
-                  history.push("/dashboard/"+res.data._id)
+              setTimeout(() => {
+                setEmail('');
+                setPassword('');
+                history.push("/dashboard/"+res.data._id)
+            }, 500);
+
+              
+          })
+          .catch(error => {
+              dispatch({type: 'LOGOUT'});
+              
+              setTimeout(() => {
+                setOpen(false)
+                setIserror(true)
+
+                if(error.response && error.response.data.message === "Not activated"){
+                  setErrorMessage("Your account is not Activated yet. Activation process is ongoing and you'll be informed by email when your account is activated")
+                }else{
+                  setErrorMessage("Auth failure! Please create an account or consider recovering your password.")
+                }
+                
               }, 500);
-
-                
-             })
-             .catch(error => {
-                dispatch({type: 'LOGOUT'});
-                
-                setTimeout(() => {
-                  setOpen(false)
-                  setIserror(true)
-
-                  if(error.response && error.response.data.message === "Not activated"){
-                    setErrorMessage("Your account is not Activated yet. Activation process is ongoing and you'll be informed by email when your account is activated")
-                  }else{
-                    setErrorMessage("Auth failure! Please create an account or consider recovering your password.")
-                  }
-                  
-                }, 500);
-                
-             })
-    }
-
-    const handleSignUpClicked = (e) => {
-      e.preventDefault();
-      console.log("haha")
+              
+          })
+        }
     }
 
     useEffect(() => {
@@ -144,13 +148,13 @@ const Login = () => {
             {showform &&
             <Grid container className={classes.root} spacing={2}>
             
-              <Grid item xs={3}>
+              <Grid item lg={4} md={3} sm={12}>
                 
               <p>
               </p>
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item lg={4} md={6} sm={12}>
             
               <div>
                 <Backdrop className={classes.backdrop} open={open}>
@@ -161,7 +165,7 @@ const Login = () => {
               <Paper className={classes.control}>
                 <div>
                   {iserror && 
-                      <Alert severity="error">
+                      <Alert style={{textAlign: "left"}} severity="error">
                           {errorMessage}
                       </Alert>
                   }
@@ -201,19 +205,14 @@ const Login = () => {
                   </FormControl>
                   <p style={{marginBottom: 30}}>By clicking Sign In, you agree to our Terms of Use and our Privacy Policy.</p>
                   <Button fullWidth={true} variant="contained" color="primary" onClick={handleLogin}>Sign In</Button>
-                  <p style={{marginBottom: 30, fontWeight: "bold"}}>Forgot your password?</p>
-                  <p onClick={handleSignUpClicked} style={{marginBottom: 30, fontSize: "medium", fontWeight: "bold"}}>
-                    
-                    <Link href="#" onClick={handleSignUpClicked}>
-                      Don't have an account? Sign up!
-                    </Link>
-                  </p>
+                  <p><Link href="#" onClick={() => history.push("/forgot-password")}>Forgot your password?</Link></p>
+                  <p>Don't have an account?<Link href="#" onClick={() => history.push("/signup")}> Sign up!</Link></p>
                 </form>
                 </Paper>
                 
               </Grid>
 
-              <Grid item xs={3}>
+              <Grid item lg={4} md= {3} sm={12}>
               <p></p>
               </Grid>
               

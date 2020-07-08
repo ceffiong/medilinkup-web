@@ -38,14 +38,14 @@ import { useLocation } from "react-router-dom";
 import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react'
 import { indigo, pink } from '@material-ui/core/colors';
-
-
 import { Switch, Route } from 'react-router-dom';
 import Login from '../auth/Login';
 import Signup from '../auth/Signup'
 import Dashboard from '../healthworkers/Dashboard'
 import Profile from '../healthworkers/Profile'
 import HealthWorkers from '../healthworkers/Healthworkers'
+import ForgotPassword from '../../components/auth/ForgotPassword'
+import ResetPassword from '../../components/auth/ResetPassword'
 import Patients from '../patients/Patients'
 import Bio from '../patients/Bio'
 import Metrics from '../patients/Metrics'
@@ -439,6 +439,10 @@ export default function Main() {
       dispatch({type: 'LOGOUT'});
       if(location.pathname === "/login"){
         history.push("/login")
+      }else if(location.pathname === "/forgot-password"){
+        history.push("/forgot-password")
+      }else if(location.pathname.startsWith("/reset-password")){
+        history.push(location.pathname)
       }else{
         history.push("/signup")
       }
@@ -450,7 +454,7 @@ export default function Main() {
   useEffect(() => {
     
     const { pathname } = location;
-    if(pathname === "/patients" || pathname === "/healthworkers" || pathname === "/signup" || pathname === "/login" || pathname.startsWith("/dashboard/") || pathname === ("/healthworker/logout")){
+    if(pathname === "/patients" || pathname === "/healthworkers" || pathname === "/signup" || pathname === "/login" || pathname === "/forgot-password" || pathname.startsWith("/reset-password") || pathname.startsWith("/dashboard/") || pathname === ("/healthworker/logout")){
       setShowPatientMenu(false)
     }
     if(pathname.startsWith("/patients/biodata/") || pathname.startsWith("/patients/anthropometrics/") || pathname.startsWith("/patients/symptoms/") || pathname.startsWith("/patients/diagnostics/")){
@@ -664,6 +668,8 @@ export default function Main() {
             <Route exact path="/healthworkers" component={HealthWorkers} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
+            <Route exact path="/forgot-password" component={ForgotPassword} />
+            <Route exact path="/reset-password/:token" component={ResetPassword} />
             <Route exact path="/dashboard/:id" component={Dashboard} />
             <Route exact path="/profile/:id" component={Profile} />
             <Route exact path="/healthworkers" component={HealthWorkers} />

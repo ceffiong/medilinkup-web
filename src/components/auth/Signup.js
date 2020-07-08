@@ -62,7 +62,6 @@ const useStyles = makeStyles((theme) => ({
     control: {
         padding: theme.spacing(5),
         textAlign: "center",
-        margin: theme.spacing(5)
     },
     textcolor: {
         color: mytextcolor
@@ -281,8 +280,8 @@ const Signup = () => {
         <div className={classes.root}>
             {showform &&
             <Grid container className={classes.root} spacing={2}>
-                <Grid item xs={3}></Grid>
-                <Grid item xs={6}>
+                <Grid item lg={4} md={3} sm={12}></Grid>
+                <Grid item lg={4} md={6} sm={12}>
                     
 
                     <div>
@@ -294,7 +293,7 @@ const Signup = () => {
                     <Paper className={classes.control}>
                         <div>
                             {iserror && 
-                                <Alert severity="error">
+                                <Alert style={{textAlign: "left"}} severity="error">
                                     {errorMessages.map((msg, i) => {
                                         return <div key={i}>{msg}</div>
                                     })}
@@ -302,7 +301,7 @@ const Signup = () => {
                             }
 
                             {success && 
-                                <Alert severity="success">
+                                <Alert style={{textAlign: "left"}} severity="success">
                                     {successMessage}
                                 </Alert>
                             }
@@ -410,17 +409,12 @@ const Signup = () => {
 
                             <p style={{marginBottom: 20}}>By clicking Sign In, you agree to our Terms of Use and our Privacy Policy.</p>
                             <Button fullWidth={true} variant="contained" color="primary" onClick={handleSignUp}>Sign Up</Button>
-                            <p style={{marginBottom: 20, fontWeight: "bold"}}>Forgot your password?</p>
-                            <p onClick={() => console.log("what")} style={{marginBottom: 30, fontSize: "medium", fontWeight: "bold"}}>
-                                
-                                <Link href="#" onClick={() => history.push("/login")}>
-                                Already have an account? Login here!
-                                </Link>
-                            </p>
+                            {/*<p><Link href="#" onClick={() => history.push("/forgot-password")}>Forgot your password?</Link></p>*/}
+                            <p>Already have an account? <Link href="#" onClick={() => history.push("/login")}> Login</Link></p>
                         </form>
                     </Paper>
                 </Grid>
-                <Grid item xs={3}></Grid>
+                <Grid item lg={4} md={3} sm={12}></Grid>
             </Grid>
             }
         </div>

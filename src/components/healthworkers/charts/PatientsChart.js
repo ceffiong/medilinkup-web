@@ -8,7 +8,7 @@ import {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        margin: theme.spacing(10)
+        margin: theme.spacing(5)
       },
   }));
 
