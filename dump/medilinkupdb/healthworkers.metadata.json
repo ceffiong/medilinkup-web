@@ -1,1 +1,0 @@
-{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"medilinkupdb.healthworkers"},{"v":{"$numberInt":"2"},"unique":true,"key":{"contact.email":{"$numberInt":"1"}},"name":"contact.email_1","ns":"medilinkupdb.healthworkers","background":true}],"uuid":"c67a6b4253894375adf94b66a995ff5e"}
